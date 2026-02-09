@@ -1,8 +1,6 @@
 /*
- * Name: YOUR NAME
+ * Name: Nigar Nazarli
  * Project: Random Number Generator Statistics
- * Class: Object-Oriented Analysis & Design
- * Date: YYYY-MM-DD
  */
 
 import java.util.ArrayList;
