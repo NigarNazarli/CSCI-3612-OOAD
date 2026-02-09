@@ -1,17 +1,17 @@
-# Random Number Generator Analysis (Java)
+# Random Number Generator Statistics (Java)
 
 This project implements a Java program that generates random numbers using
-different built-in Java random number generators and analyzes the results
-using descriptive statistics.
+different built-in Java random number generators and analyzes the generated
+data using descriptive statistics.
 
-The goal is to observe how statistical measures stabilize as the sample
-size increases for a uniform distribution on the interval [0, 1).
+It demonstrates how statistical properties converge as the sample size
+increases for a uniform distribution on the interval **[0, 1)**.
 
 ---
 
-## Random Number Generators Used
+##  Random Number Generators Used
 
-The following Java random number generators are compared:
+The following Java random number generators are implemented:
 
 - `java.util.Random`
 - `Math.random()`
@@ -21,50 +21,42 @@ Each generator produces random `double` values in the range **[0, 1)**.
 
 ---
 
-## Statistical Analysis
+##  Statistical Analysis
 
-For each generator and selected sample sizes, the program computes:
+For each random number generator and selected sample sizes, the program
+computes the following descriptive statistics:
 
-- Number of elements (n)
+- Number of elements (**n**)
 - Mean
 - Sample standard deviation
 - Minimum value
 - Maximum value
 
-Very large sample sizes are included to clearly demonstrate statistical
-convergence.
+As the sample size increases:
+- The mean approaches **0.5**
+- The sample standard deviation approaches approximately **0.29**
+- The minimum and maximum values approach **0** and **1**
+
+Deviations are expected for small sample sizes due to randomness.
 
 ---
 
-## Logic & Methodology
+##  Program Structure
 
-- **populate()**  
-  Generates an `ArrayList<Double>` of size `n` using a selected random
-  number generator.
+The project consists of a single Java class named `Generator` with the
+following methods:
 
-- **statistics()**  
-  Calculates the mean, sample standard deviation, minimum, and maximum
-  values using explicit mathematical computation.
+- **`populate(int n, int randNumGen)`**  
+  Generates `n` random values using a selected random number generator.
 
-- **display()**  
-  Displays the calculated statistics in a formatted table in the console.
+- **`statistics(ArrayList<Double> randomValues)`**  
+  Computes descriptive statistics for the generated values.
 
-- **execute()**  
+- **`display(ArrayList<Double> results, boolean headerOn)`**  
+  Displays the results in a formatted table.
+
+- **`execute()`**  
   Runs all combinations of sample sizes and random number generators.
 
----
-
-## Theoretical Background
-
-This program demonstrates the **Law of Large Numbers**. Since the generators
-produce values from a uniform distribution on **[0, 1)**, the following behavior
-is expected as the sample size increases:
-
-- The mean approaches **0.5**
-- The sample standard deviation approaches **~0.29**
-- The minimum and maximum values move closer to **0** and **1**
-
-Small sample sizes may show deviations due to randomness, while larger samples
-produce more stable results.
-
-
+The `main` method is intentionally minimal and only creates an instance of the
+`Generator` class and calls the `execute()` method.
