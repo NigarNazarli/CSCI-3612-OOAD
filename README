@@ -1,0 +1,163 @@
+.md
+# Random Number Generator Statistics (Java)
+
+## 1. Project Description
+This project implements a Java program that generates pseudo-random numbers
+using multiple built-in Java random number generators and analyzes the
+generated data using descriptive statistics. The implementation strictly
+follows the assignment requirement of using a single Java class named
+`Generator` and demonstrates object-oriented programming principles.
+
+The purpose of the program is to empirically observe the statistical behavior
+of random samples drawn from a uniform distribution on the interval [0, 1)
+and to verify theoretical expectations as the sample size increases.
+
+---
+
+## 2. Assignment Requirements Mapping
+The implementation satisfies the assignment requirements as follows:
+
+- **Single class:** Implemented using one public class named `Generator`
+- **Random number generators used:**
+  - `java.util.Random`
+  - `Math.random()`
+  - `java.util.concurrent.ThreadLocalRandom`
+- **Required methods implemented:**
+  - `populate(int n, int randNumGen)`
+  - `statistics(ArrayList<Double> randomValues)`
+  - `display(ArrayList<Double> results, boolean headerOn)`
+  - `execute()`
+- **Minimal main method:** Instantiates `Generator` and calls `execute()`
+- **Nine total experiments:**  
+  3 sample sizes × 3 random number generators
+- **Explicit OOP concept demonstration:**  
+  Class definition, method definitions, class attributes, object instantiation,
+  and accessibility modifiers are highlighted using comments in the source code
+
+---
+
+## 3. Random Number Generation
+For each experiment, `n` random double values are generated in the interval
+[0, 1) using one of the following generators:
+
+- **`java.util.Random`** – Linear congruential pseudo-random generator
+- **`Math.random()`** – Static convenience method internally backed by
+  `java.util.Random`
+- **`ThreadLocalRandom`** – Thread-local generator optimized for concurrent
+  environments
+
+Each generator produces independent samples from a uniform distribution.
+
+---
+
+## 4. Descriptive Statistics
+For each generated dataset, the following statistics are computed:
+
+- Sample size:  
+  \[
+  n
+  \]
+
+- Sample mean:  
+  \[
+  \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i
+  \]
+
+- Sample standard deviation:  
+  \[
+  s = \sqrt{\frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2}
+  \]
+
+- Minimum value:  
+  \[
+  \min(x_1, \ldots, x_n)
+  \]
+
+- Maximum value:  
+  \[
+  \max(x_1, \ldots, x_n)
+  \]
+
+The use of the **sample standard deviation** (division by \( n - 1 \)) is
+statistically appropriate when estimating population variability from finite
+samples.
+
+The results are returned in the required order:
+[n, mean, stddev, min, max]
+
+---
+
+## 5. Sample Sizes
+The program evaluates each random number generator using the following sample
+sizes:
+
+- n = 10
+- n = 100
+- n = 1000
+
+This produces a total of **nine experimental results**, as required by the
+assignment.
+
+---
+
+## 6. Theoretical Expectations and Observed Behavior
+For a continuous uniform distribution on the interval [0, 1):
+
+- Theoretical mean:
+  \[
+  \mu = 0.5
+  \]
+
+- Theoretical standard deviation:
+  \[
+  \sigma = \frac{1}{\sqrt{12}} \approx 0.2887
+  \]
+
+According to the **Law of Large Numbers**, as the sample size increases,
+sample statistics converge to their theoretical population values.
+
+### Observations:
+- For **n = 10**, the statistics exhibit high variability due to sampling noise
+  and the influence of individual observations.
+- For **n = 100**, the sample mean and standard deviation begin to stabilize
+  near their theoretical values.
+- For **n = 1000**, the mean converges toward 0.5, the sample standard deviation
+  approaches approximately 0.29, and the minimum and maximum values move closer
+  to 0 and 1 respectively.
+
+These results empirically confirm the theoretical properties of the uniform
+distribution and demonstrate the effect of increasing sample size on
+statistical estimation accuracy.
+
+---
+
+## 7. Program Output
+The program outputs the computed statistics in a formatted table displayed in
+the system console. A screenshot of the terminal output is included below to
+demonstrate correct execution and to visually support the observed convergence
+behavior.
+
+
+
+---
+
+## 8. Object-Oriented Design
+The program demonstrates key object-oriented programming concepts:
+
+- **Class definition:** `Generator`
+- **Method definitions:** Each functional requirement is encapsulated in a
+  dedicated method
+- **Class attributes:** Constants used to control generator selection
+- **Object instantiation:** Explicit creation of `Generator`, `Random`, and
+  `ArrayList` objects
+- **Accessibility:** Proper use of `public` and `private` modifiers to enforce
+  encapsulation
+
+---
+
+## 9. Compilation and Execution
+To compile and run the program from the `src` directory:
+
+```bash
+javac Generator.java
+java -cp . Generator
