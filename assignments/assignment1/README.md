@@ -1,0 +1,62 @@
+# Random Number Generator Statistics (Java)
+
+This project implements a Java program that generates random numbers using
+different built-in Java random number generators and analyzes the generated
+data using descriptive statistics.
+
+It demonstrates how statistical properties converge as the sample size
+increases for a uniform distribution on the interval **[0, 1)**.
+
+---
+
+##  Random Number Generators Used
+
+The following Java random number generators are implemented:
+
+- `java.util.Random`
+- `Math.random()`
+- `java.util.concurrent.ThreadLocalRandom`
+
+Each generator produces random `double` values in the range **[0, 1)**.
+
+---
+
+##  Statistical Analysis
+
+For each random number generator and selected sample sizes, the program
+computes the following descriptive statistics:
+
+- Number of elements (**n**)
+- Mean
+- Sample standard deviation
+- Minimum value
+- Maximum value
+
+As the sample size increases:
+- The mean approaches **0.5**
+- The sample standard deviation approaches approximately **0.29**
+- The minimum and maximum values approach **0** and **1**
+
+Deviations are expected for small sample sizes due to randomness.
+
+---
+
+##  Program Structure
+
+The project consists of a single Java class named `Generator` with the
+following methods:
+
+- **`populate(int n, int randNumGen)`**  
+  Generates `n` random values using a selected random number generator.
+
+- **`statistics(ArrayList<Double> randomValues)`**  
+  Computes descriptive statistics for the generated values.
+
+- **`display(ArrayList<Double> results, boolean headerOn)`**  
+  Displays the results in a formatted table.
+
+- **`execute()`**  
+  Runs all combinations of sample sizes and random number generators.
+
+The `main` method is intentionally minimal and only creates an instance of the
+`Generator` class and calls the `execute()` method.
