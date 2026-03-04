@@ -37,10 +37,9 @@ This avoids a monolithic (“god class”) design.
 The buffer has a constant size **N**.  
 Index calculation uses modulo arithmetic:
 
-```text
 index = sequence % capacity
 
-Overwrite Condition
+### Overwrite Condition
 
 Overwrite occurs when:
 
@@ -60,44 +59,82 @@ Slow readers skip missed data safely
 ---
 
 ## UML Class Diagram
+## UML Class Diagram
 
-+--------------------------------------------------+
-|                   RingBuffer<T>                  |
-+--------------------------------------------------+
-| - buffer: Object[]                               |
-| - capacity: int                                  |
-| - writeSequence: long                            |
-+--------------------------------------------------+
-| + writeInternal(value: T): void                  |
-| + readInternal(sequence: long): T                |
-| + getWriteSequence(): long                       |
-+--------------------------------------------------+
-                 ▲
-                 |
-     ---------------------------
-     |                         |
-+------------+           +------------+
-|   Writer   |           |   Reader   |
-+------------+           +------------+
-| + write()  |           | + read()   |
-+------------+           +------------+
 
-## UML Sequence – Write
++----------------------------------------------------+
+|                RingBuffer<T>                       |
++----------------------------------------------------+
+| - buffer: Object[]                                 |
+| - capacity: int                                    |
+| - writeSequence: long                              |
++----------------------------------------------------+
+| + RingBuffer(capacity: int)                        |
+| + writeInternal(value: T): void                    |
+| + readInternal(sequence: long): T                  |
+| + getWriteSequence(): long                         |
+| + getCapacity(): long                              |
++----------------------------------------------------+
 
-Main → Writer : write(value)
-Writer → RingBuffer : writeInternal(value)
-RingBuffer : store value
-RingBuffer : increment writeSequence
+                ▲
+                |
+     --------------------------------
+     |                              |
++--------------------+     +--------------------+
+|     Writer<T>      |     |     Reader<T>      |
++--------------------+     +--------------------+
+| - buffer:          |     | - buffer:          |
+|   RingBuffer<T>    |     |   RingBuffer<T>    |
+|                    |     | - nextSequence:    |
+|                    |     |   long             |
++--------------------+     +--------------------+
+| + Writer(buffer:   |     | + Reader(buffer:   |
+|   RingBuffer<T>)   |     |   RingBuffer<T>)   |
+| + write(value: T): |     | + read(): T        |
+|   void             |     |                    |
++--------------------+     +--------------------+
 
-## UML Sequence – Read
 
-Main → Reader : read()
-Reader → RingBuffer : getWriteSequence()
-Reader : check overwrite condition
-Reader → RingBuffer : readInternal()
-Reader : update nextSequence
+
+## UML Sequence Diagrams
+Write
+
+```text
+Main            Writer<T>          RingBuffer<T>
+ |                  |                    |
+ | write(value)     |                    |
+ |----------------->|                    |
+ |                  | writeInternal(value)
+ |                  |------------------->|
+ |                  |                    | store value
+ |                  |                    | update writeSequence
+ |                  |<-------------------|
+ |                  | print "Writer wrote"
+ |<-----------------|                    |
 
 ---
+
+Read
+
+```text
+Main            Reader<T>          RingBuffer<T>
+ |                  |                    |
+ | read()           |                    |
+ |----------------->|                    |
+ |                  | getWriteSequence() |
+ |                  |------------------->|
+ |                  |<-------------------|
+ |                  | getCapacity()      |
+ |                  |------------------->|
+ |                  |<-------------------|
+ |                  | check overwrite    |
+ |                  | (writeSeq - nextSeq > capacity)
+ |                  |
+ |                  | readInternal(nextSeq)
+ |                  |------------------->|
+ |                  |<-------------------| return value
+ |                  | nextSequence++
+ |<-----------------|                    |
 
 ## How to Compile and Run
 
@@ -110,11 +147,10 @@ Before running the project, ensure that:
 
 You can verify your Java installation by running:
 
-```bash
 java -version
 javac -version
 
-Compile
+### Compile
 
 Navigate to the source directory:
 
@@ -124,7 +160,7 @@ Compile all Java files:
 
 javac *.java
 
-Run
+### Run
 
 Execute the main class:
 
