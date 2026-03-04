@@ -1,121 +1,58 @@
-Ring Buffer – Single Writer, Multiple Independent Readers
-Project Overview
+# Ring Buffer – Multiple Readers, Single Writer
 
-This project implements a fixed-capacity Ring Buffer (circular buffer) in Java that supports:
+## 1. Project Overview
 
-One single writer
+This project implements a **fixed-capacity circular buffer (Ring Buffer)** in Java that supports:
 
-Multiple independent readers
-
-Overwrite behavior when the buffer becomes full
-
-Automatic skip behavior for slow readers
+- A **single writer**
+- **Multiple independent readers**
+- Automatic **overwrite** when the buffer becomes full
+- Automatic **skip behavior** for slow readers
 
 Each reader maintains its own reading position. Reading by one reader does not affect any other reader.
 
-When the buffer capacity is exceeded, the writer overwrites the oldest data. If a reader falls too far behind and attempts to read overwritten data, it automatically skips forward to the oldest still-available element.
+When the buffer capacity is exceeded, the oldest entries are overwritten. If a reader attempts to access overwritten data, it automatically advances to the oldest still-available item.
 
-The design emphasizes clear object-oriented structure and separation of responsibilities.
-Design Overview
+---
 
-The solution is implemented using four classes:
+## 2. Design Architecture
 
-RingBuffer
+The implementation follows clean object-oriented principles and separates responsibilities across four classes:
 
-Writer
+| Class         | Responsibility |
+|--------------|----------------|
+| `RingBuffer` | Core circular storage structure |
+| `Writer`     | Single writer role |
+| `Reader`     | Independent reader role |
+| `Main`       | Driver and test logic |
 
-Reader
+This avoids a monolithic (“god class”) design.
 
-Main (driver class)
+---
 
-Each class has a well-defined responsibility.
-RingBuffer
+## 3. Core Design Concepts
 
-The RingBuffer class represents the core storage mechanism.
+### Fixed Capacity
 
-Responsibilities
+The buffer has a constant size **N**.  
+Index calculation uses modulo arithmetic:
 
-Maintains a fixed-size array
+```text
+index = sequence % capacity
 
-Tracks a global write sequence number
+Overwrite Condition
 
-Computes indices using modulo arithmetic
+Overwrite occurs when:
 
-Allows overwrite when capacity is exceeded
+writeSequence - readerSequence > capacity
 
-Provides synchronized internal read and write operations
+When this happens, the reader updates:
 
-The buffer does not know about business roles such as writer or reader.
-It only manages storage mechanics.
-Writer
-
-The Writer class represents the single-writer role.
-
-Responsibilities
-
-Exposes a public write(value) method
-
-Delegates storage to RingBuffer
-
-Enforces single-writer usage at the architectural level
-
-Only one writer instance is used per buffer.
-
-Reader
-
-Each Reader instance represents an independent consumer.
-
-Responsibilities
-
-Maintains its own sequence position (nextSequence)
-
-Reads available items from the buffer
-
-Detects when it has fallen behind
-
-Skips to the oldest available item if overwrite occurred
-
-Readers operate independently and do not interfere with each other.
-
-Overwrite and Skip Logic
-
-The buffer has a fixed capacity N.
-
-When the writer inserts more than N elements:
-
-writeSequence - nextSequence > capacity
-
-This indicates that a reader has fallen behind and the requested data has already been overwritten.
-
-In this case, the reader automatically updates:
-
-nextSequence = writeSequence - capacity
-
+readerSequence = writeSequence - capacity
 This ensures:
 
-No blocking occurs
+The writer is never blocked
 
-The writer continues uninterrupted
+Readers operate independently
 
-Slow readers resume from the oldest valid item
-
-This behavior is demonstrated in the program output.
-Demonstrated Behavior
-
-When running the program:
-
-The writer inserts more elements than the buffer capacity.
-
-The buffer overwrites older values.
-
-A slow reader attempts to read outdated data.
-
-The reader detects the overwrite and prints:
-
-Reader skipped overwritten data.
-
-The reader continues reading from the oldest still-available element.
-
-Once caught up, additional reads return null.
-
-This confirms correct overwrite and independent reader behavior.
+Slow readers skip missed data safely
