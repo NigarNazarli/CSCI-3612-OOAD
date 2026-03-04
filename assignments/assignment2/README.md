@@ -59,9 +59,8 @@ Slow readers skip missed data safely
 ---
 
 ## UML Class Diagram
-## UML Class Diagram
 
-
+```text
 +----------------------------------------------------+
 |                RingBuffer<T>                       |
 +----------------------------------------------------+
@@ -93,11 +92,9 @@ Slow readers skip missed data safely
 | + write(value: T): |     | + read(): T        |
 |   void             |     |                    |
 +--------------------+     +--------------------+
+```
 
-
-
-## UML Sequence Diagrams
-Write
+## UML Sequence Diagram – `write()`
 
 ```text
 Main            Writer<T>          RingBuffer<T>
@@ -111,10 +108,8 @@ Main            Writer<T>          RingBuffer<T>
  |                  |<-------------------|
  |                  | print "Writer wrote"
  |<-----------------|                    |
-
----
-
-Read
+```
+### UML Sequence Diagram – `read()`
 
 ```text
 Main            Reader<T>          RingBuffer<T>
@@ -135,7 +130,7 @@ Main            Reader<T>          RingBuffer<T>
  |                  |<-------------------| return value
  |                  | nextSequence++
  |<-----------------|                    |
-
+```
 ## How to Compile and Run
 
 ### Prerequisites
