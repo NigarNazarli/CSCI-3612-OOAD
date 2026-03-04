@@ -56,3 +56,76 @@ The writer is never blocked
 Readers operate independently
 
 Slow readers skip missed data safely
+
+---
+
+## UML Class Diagram
+
++--------------------------------------------------+
+|                   RingBuffer<T>                  |
++--------------------------------------------------+
+| - buffer: Object[]                               |
+| - capacity: int                                  |
+| - writeSequence: long                            |
++--------------------------------------------------+
+| + writeInternal(value: T): void                  |
+| + readInternal(sequence: long): T                |
+| + getWriteSequence(): long                       |
++--------------------------------------------------+
+                 ▲
+                 |
+     ---------------------------
+     |                         |
++------------+           +------------+
+|   Writer   |           |   Reader   |
++------------+           +------------+
+| + write()  |           | + read()   |
++------------+           +------------+
+
+## UML Sequence – Write
+
+Main → Writer : write(value)
+Writer → RingBuffer : writeInternal(value)
+RingBuffer : store value
+RingBuffer : increment writeSequence
+
+## UML Sequence – Read
+
+Main → Reader : read()
+Reader → RingBuffer : getWriteSequence()
+Reader : check overwrite condition
+Reader → RingBuffer : readInternal()
+Reader : update nextSequence
+
+---
+
+## How to Compile and Run
+
+### Prerequisites
+
+Before running the project, ensure that:
+
+- Java **11 or higher** is installed
+- `javac` and `java` commands are available in your terminal
+
+You can verify your Java installation by running:
+
+```bash
+java -version
+javac -version
+
+Compile
+
+Navigate to the source directory:
+
+cd assignments/assignment2/src
+
+Compile all Java files:
+
+javac *.java
+
+Run
+
+Execute the main class:
+
+java Main
